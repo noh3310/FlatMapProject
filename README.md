@@ -12,25 +12,25 @@ Observable에 있는 변환 연산자인 flatMap을 사용해서 깃허브 리�
 ## APIManager
 - API 호출하는 함수를 구현한 클래스
 - apiCall 메서드는 RxAlamofire를 사용해 Observable<[Repos]> 를 리턴한다.
-```Swift
-func apiCall(_ str: String) -> Observable<[Repos]> {
+    ```Swift
+    func apiCall(_ str: String) -> Observable<[Repos]> {
 
-    let parameters: Parameters = [
-        "q": str
-    ]
+        let parameters: Parameters = [
+            "q": str
+        ]
 
-    return RxAlamofire.requestData(.get, URL(string: "https://api.github.com/search/repositories")!, parameters: parameters)
-        .map { (response, data) in
-            do {
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(ReposResult.self, from: data)
-                return result.items
-            } catch {
-                return []
+        return RxAlamofire.requestData(.get, URL(string: "https://api.github.com/search/repositories")!, parameters: parameters)
+            .map { (response, data) in
+                do {
+                    let decoder = JSONDecoder()
+                    let result = try decoder.decode(ReposResult.self, from: data)
+                    return result.items
+                } catch {
+                    return []
+                }
             }
-        }
-}
-```
+    }
+    ```
 
 ## ViewModel
 - SearchBar가 입력한 값을 flatMap으로 API를 호출하고 Observable<Repos]> 리턴값을 전달받는다. 다음 줄에서 Observbale<[Repos]를 구독해 API 결과값을 results 변수에 accept
